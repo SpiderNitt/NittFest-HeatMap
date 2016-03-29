@@ -31,8 +31,6 @@ public class WebViewActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_webview);
 
-        Intent intent=new Intent(this,LocService.class);
-        startService(intent);
         wb = (WebView) findViewById(R.id.webView);
         wb.getSettings().setJavaScriptEnabled(true);
         wb.getSettings().setLoadWithOverviewMode(true);

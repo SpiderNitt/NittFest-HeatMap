@@ -20,41 +20,67 @@ public class MainActivity extends AppCompatActivity {
     Context context;
     SharedPreferences sharedPreferences;
     EditText rollno;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        context=getApplicationContext();
-        rollno= (EditText) findViewById(R.id.editText);
-        sharedPreferences=getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
-        if(!isLocationEnabled(this)){
-            Toast.makeText(MainActivity.this, "Enable GPS and Mobile data", Toast.LENGTH_SHORT).show();
-        }
 
+
+    public void initialize() {
+        setContentView(R.layout.activity_main);
+        context = getApplicationContext();
+        rollno = (EditText) findViewById(R.id.editText);
+        sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
 
         String restoredText = sharedPreferences.getString("RollNo", null);
         if (restoredText != null) {
-            Intent intent= new Intent(this,WebViewActivity.class);
-            //intent.putExtra("rollNo",rollnotext);
-            startActivity(intent);
+            //Toast.makeText(this, "You are logged in as " + restoredText, Toast.LENGTH_SHORT).show();
+            if(!isLocationEnabled(this))
+            {
+                Toast.makeText(MainActivity.this, "Enable GPS! Your count is not being added!", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(this, WebViewActivity.class);
+                startActivity(intent);
+                return;
+            }
+            else
+            {
+                Intent serviceintent=new Intent(this,LocService.class);
+                startService(serviceintent);
+                Intent intent = new Intent(this, WebViewActivity.class);
+                startActivity(intent);
+                return;
+            }
         }
+    }
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        initialize();
+    }
+
+    public void justviewfunction(View v)
+    {
+        Intent intent = new Intent(this, WebViewActivity.class);
+        startActivity(intent);
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initialize();
 
     }
     public void stopService(View V){
-        stopService(new Intent(getBaseContext(),LocService.class));
+        stopService(new Intent(getBaseContext(), LocService.class));
     }
-    public void submit(View V){
-        if(!isLocationEnabled(this)){
-            Toast.makeText(MainActivity.this, "Enable GPS and Mobile data", Toast.LENGTH_SHORT).show();
+    public void submit(View V)
+    {
+        if(!isLocationEnabled(this))
+        {
+            Toast.makeText(MainActivity.this, "Enable GPS!", Toast.LENGTH_SHORT).show();
             return;
         }
         String rollnotext=rollno.getText().toString();
         SharedPreferences.Editor editor=sharedPreferences.edit();
         editor.putString("RollNo",rollnotext);
         editor.apply();
-
+        Toast.makeText(this, "You are logged in as " + rollno.getText().toString(), Toast.LENGTH_SHORT).show();
         Intent intent= new Intent(this,WebViewActivity.class);
-        //intent.putExtra("rollNo",rollnotext);
         startActivity(intent);
     }
 
