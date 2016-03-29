@@ -53,12 +53,13 @@ public class LocService extends Service implements LocationListener {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        rollNo=pref.getString("RollNo","111111");
+        rollNo=pref.getString("RollNo",null);
         //rollNo=intent.getStringExtra("rollNo");
         Toast.makeText(this, "Service started", Toast.LENGTH_SHORT).show();
 
+
         Intent intent2 = new Intent(this, WebViewActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        intent2.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent2, 0);
 
         Notification noti = null;
@@ -72,8 +73,7 @@ public class LocService extends Service implements LocationListener {
         }
 
         startForeground(1234, noti);
-
-        return START_STICKY;
+        return START_NOT_STICKY;
 
     }
 

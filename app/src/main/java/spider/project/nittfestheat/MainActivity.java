@@ -79,9 +79,13 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor=sharedPreferences.edit();
         editor.putString("RollNo",rollnotext);
         editor.apply();
-        Toast.makeText(this, "You are logged in as " + rollno.getText().toString(), Toast.LENGTH_SHORT).show();
+        initialize();
+        /*Toast.makeText(this, "You are logged in as " + rollno.getText().toString(), Toast.LENGTH_SHORT).show();
+        Intent serviceintent=new Intent(this,LocService.class);
+        startService(serviceintent);
         Intent intent= new Intent(this,WebViewActivity.class);
         startActivity(intent);
+        */
     }
 
     public static boolean isLocationEnabled(Context context) {
