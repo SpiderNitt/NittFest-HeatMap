@@ -26,5 +26,6 @@
         android:id="@+id/button"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:onClick="submit" />
+        android:onClick="submit"
+        android:layout_margin="10dp" />
 </RelativeLayout>

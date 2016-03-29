@@ -50,6 +50,7 @@ public class LocService extends Service implements LocationListener {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
         rollNo=pref.getString("RollNo","111111");
         //rollNo=intent.getStringExtra("rollNo");
         Toast.makeText(this, "Service started", Toast.LENGTH_SHORT).show();
@@ -60,6 +61,7 @@ public class LocService extends Service implements LocationListener {
     @Override
     public void onCreate() {
         super.onCreate();
+
         pref=getApplicationContext().getSharedPreferences("MyPrefs",MODE_PRIVATE);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
