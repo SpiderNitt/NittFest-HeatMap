@@ -38,6 +38,6 @@ public class WebViewActivity extends AppCompatActivity {
         wb.getSettings().setBuiltInZoomControls(true);
         wb.getSettings().setPluginState(WebSettings.PluginState.ON);
         wb.setWebViewClient(new HelloWebViewClient());
-        wb.loadUrl("https://spider.nitt.edu/~rishab9797/nittfest/a/");
+        wb.loadUrl("https://spider.nitt.edu/heat/map");
     }
 }

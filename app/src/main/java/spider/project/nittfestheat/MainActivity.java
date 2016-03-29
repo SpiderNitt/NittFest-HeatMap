@@ -76,6 +76,10 @@ public class MainActivity extends AppCompatActivity {
             return;
         }
         String rollnotext=rollno.getText().toString();
+        if(rollnotext.length()!=9){
+            Toast.makeText(MainActivity.this, "Write proper roll no", Toast.LENGTH_SHORT).show();
+            return;
+        }
         SharedPreferences.Editor editor=sharedPreferences.edit();
         editor.putString("RollNo",rollnotext);
         editor.apply();

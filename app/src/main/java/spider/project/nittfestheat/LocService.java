@@ -35,7 +35,7 @@ import java.util.Calendar;
 public class LocService extends Service implements LocationListener {
 
 
-    String BASE_URL="http://c09e6cfc.ngrok.io/add";
+    String BASE_URL="https://spider.nitt.edu/heat/add";
     SharedPreferences pref;
     LocationManager locationManager;
     LocationListener locationListener;
