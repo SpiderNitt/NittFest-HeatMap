@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Criteria;
 import android.location.GpsStatus;
@@ -31,11 +32,13 @@ import java.util.Calendar;
  */
 public class LocService extends Service implements LocationListener {
 
+
+    SharedPreferences pref;
     LocationManager locationManager;
     LocationListener locationListener;
     Context context;
     boolean gps_enabled, network_enabled, thread_stop = false;
-    String latitude, longitude;
+    String latitude, longitude,rollNo;
     Thread thread;
     int lastsavedseconds;
 
@@ -47,7 +50,8 @@ public class LocService extends Service implements LocationListener {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-
+        rollNo=pref.getString("RollNo","111111");
+        //rollNo=intent.getStringExtra("rollNo");
         Toast.makeText(this, "Service started", Toast.LENGTH_SHORT).show();
         return START_STICKY;
 
@@ -56,6 +60,7 @@ public class LocService extends Service implements LocationListener {
     @Override
     public void onCreate() {
         super.onCreate();
+        pref=getApplicationContext().getSharedPreferences("MyPrefs",MODE_PRIVATE);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
@@ -79,10 +84,16 @@ public class LocService extends Service implements LocationListener {
                 while (!thread_stop) {
 
                     //every 30mins sends data
-                    if(lastsavedseconds-c.get(Calendar.SECOND)>=10){
-                        lastsavedseconds=c.get(Calendar.SECOND);
-
-                        onLocationChanged(finalLocation);
+                    try {
+                        Thread.sleep(10000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    Log.d("Loc", "Lat " + latitude + " Long " + longitude);
+                        //Toast.makeText(this, "Lat "+latitude+" Long "+longitude,
+                        //        Toast.LENGTH_SHORT).show();
+                    new AsyncSendData().execute(latitude,longitude,rollNo);
+                       // onLocationChanged(finalLocation);
 
                     }
                     // Log.d("Thread","Thread");
@@ -92,9 +103,10 @@ public class LocService extends Service implements LocationListener {
                     //new AsyncSendData().execute(latitude, longitude);
                     //
                 }
-            }
+
         });
         thread.start();
+
 
 
     }
@@ -105,10 +117,7 @@ public class LocService extends Service implements LocationListener {
         latitude = String.valueOf(location.getLatitude());
         longitude = String.valueOf(location.getLongitude());
 
-        Log.d("Loc", "Lat " + latitude + " Long " + longitude);
-        //Toast.makeText(this, "Lat "+latitude+" Long "+longitude,
-        //        Toast.LENGTH_SHORT).show();
-        new AsyncSendData().execute(latitude,longitude,"106114100");
+
 
     }
 
@@ -145,7 +154,7 @@ public class LocService extends Service implements LocationListener {
         {
             String result = "";
             try {
-                String link = "http://b1a7b36a.ngrok.io/add";
+                String link = "http://ad0a4cb9.ngrok.io/add";
                 String latitude = params[0];
                 String longitude = params[1].toLowerCase();
                 String rollno = params[2];

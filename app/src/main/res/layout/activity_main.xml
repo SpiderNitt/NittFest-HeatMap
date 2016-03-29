@@ -9,18 +9,22 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="spider.project.nittfestheat.MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <EditText
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:id="@+id/editText"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+
+        android:hint="Enter Roll No" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Stop service"
+        android:text="Submit"
         android:id="@+id/button"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:onClick="stopService" />
+        android:layout_centerHorizontal="true"
+        android:onClick="submit" />
 </RelativeLayout>
