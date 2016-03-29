@@ -21,6 +21,14 @@ public class MainActivity extends AppCompatActivity {
         rollno= (EditText) findViewById(R.id.editText);
         sharedPreferences=getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
 
+
+        String restoredText = sharedPreferences.getString("RollNo", null);
+        if (restoredText != null) {
+            Intent intent= new Intent(this,WebViewActivity.class);
+            //intent.putExtra("rollNo",rollnotext);
+            startActivity(intent);
+        }
+
     }
     public void stopService(View V){
         stopService(new Intent(getBaseContext(),LocService.class));
