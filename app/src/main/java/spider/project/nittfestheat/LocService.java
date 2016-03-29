@@ -94,7 +94,8 @@ public class LocService extends Service implements LocationListener {
             // for ActivityCompat#requestPermissions for more details.
             provider=LocationManager.GPS_PROVIDER;
         }
-
+        final Location location;
+        location=locationManager.getLastKnownLocation(provider);
         locationManager.requestLocationUpdates(provider, 0, 0, this);
         thread = new Thread(new Runnable() {
             @Override
@@ -106,6 +107,9 @@ public class LocService extends Service implements LocationListener {
                         Thread.sleep(10000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
+                    }
+                    if(latitude==null||longitude==null){
+                        onLocationChanged(location);
                     }
                     Log.d("Loc", "Lat " + latitude + " Long " + longitude);
                         //Toast.makeText(this, "Lat "+latitude+" Long "+longitude,
