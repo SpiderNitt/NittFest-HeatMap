@@ -1,6 +1,8 @@
 package spider.project.nittfestheat;
 
 import android.Manifest;
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -54,6 +56,23 @@ public class LocService extends Service implements LocationListener {
         rollNo=pref.getString("RollNo","111111");
         //rollNo=intent.getStringExtra("rollNo");
         Toast.makeText(this, "Service started", Toast.LENGTH_SHORT).show();
+
+        Intent intent2 = new Intent(this, WebViewActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent2, 0);
+
+        Notification noti = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            noti = new Notification.Builder(getApplicationContext())
+                    .setContentTitle("NITTFest Heat")
+                    .setContentText("May the odds be ever in your dept's favor")
+                    .setSmallIcon(android.R.drawable.ic_dialog_map)
+                    .setContentIntent(pendingIntent)
+                    .build();
+        }
+
+        startForeground(1234, noti);
+
         return START_STICKY;
 
     }
@@ -74,12 +93,8 @@ public class LocService extends Service implements LocationListener {
             // for ActivityCompat#requestPermissions for more details.
 
         }
-        Location location = null;
-        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-        final Location finalLocation = location;
-        final Calendar c=Calendar.getInstance();
-        lastsavedseconds=c.get(Calendar.SECOND);
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
