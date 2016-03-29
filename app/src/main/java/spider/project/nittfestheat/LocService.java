@@ -35,6 +35,7 @@ import java.util.Calendar;
 public class LocService extends Service implements LocationListener {
 
 
+    String BASE_URL="http://c09e6cfc.ngrok.io/add";
     SharedPreferences pref;
     LocationManager locationManager;
     LocationListener locationListener;
@@ -80,7 +81,7 @@ public class LocService extends Service implements LocationListener {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        String provider=LocationManager.GPS_PROVIDER;
         pref=getApplicationContext().getSharedPreferences("MyPrefs",MODE_PRIVATE);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -91,10 +92,10 @@ public class LocService extends Service implements LocationListener {
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-
+            provider=LocationManager.GPS_PROVIDER;
         }
 
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        locationManager.requestLocationUpdates(provider, 0, 0, this);
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -171,7 +172,7 @@ public class LocService extends Service implements LocationListener {
         {
             String result = "";
             try {
-                String link = "http://ad0a4cb9.ngrok.io/add";
+                String link = BASE_URL;
                 String latitude = params[0];
                 String longitude = params[1].toLowerCase();
                 String rollno = params[2];

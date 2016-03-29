@@ -16,7 +16,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-
+        android:inputType="number"
         android:hint="Enter Roll No" />
 
     <Button
@@ -36,4 +36,6 @@
         android:id="@+id/button2"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
+
+
 </RelativeLayout>
