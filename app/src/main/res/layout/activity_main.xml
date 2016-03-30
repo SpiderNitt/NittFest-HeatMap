@@ -27,7 +27,7 @@
         android:layout_height="0dp"
         android:text="Submit"
         android:textColor="#ffffff"
-        android:background="#6c8df0"
+        android:background="@drawable/btn"
         android:layout_margin="10dp"
         android:id="@+id/button"
         android:layout_weight="0.15"
@@ -37,12 +37,12 @@
         android:layout_height="0dp"
         android:text="Just View"
         android:textColor="#ffffff"
-        android:background="#6c8df0"
+        android:background="@drawable/btn"
         android:layout_marginTop="5dp"
         android:layout_margin="10dp"
         android:layout_weight="0.3"
         android:onClick="justviewfunction"
-        android:id="@+id/button2" />
+        android:id="@+id/button2"/>
 
 
 </LinearLayout>

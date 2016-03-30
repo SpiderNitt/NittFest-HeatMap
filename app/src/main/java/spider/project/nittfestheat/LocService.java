@@ -99,14 +99,14 @@ public class LocService extends Service implements LocationListener {
                 while (!thread_stop) {
 
 
-                    SystemClock.sleep(60000);
+                    //SystemClock.sleep(60000);
                     //every 120secs sends data
-                    /*try {
-                        Thread.sleep(120000);
+                    try {
+                        Thread.sleep(60000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    */
+
                     if(latitude==null||longitude==null){
                         onLocationChanged(location);
                     }
