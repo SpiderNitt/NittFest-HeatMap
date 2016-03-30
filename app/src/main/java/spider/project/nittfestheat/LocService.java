@@ -99,7 +99,7 @@ public class LocService extends Service implements LocationListener {
                 while (!thread_stop) {
 
 
-                    SystemClock.sleep(7000);
+                    SystemClock.sleep(60000);
                     //every 120secs sends data
                     /*try {
                         Thread.sleep(120000);
