@@ -97,9 +97,9 @@ public class LocService extends Service implements LocationListener {
             public void run() {
                 while (!thread_stop) {
 
-                    //every 10secs sends data
+                    //every 120secs sends data
                     try {
-                        Thread.sleep(10000);
+                        Thread.sleep(120000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
