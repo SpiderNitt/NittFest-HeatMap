@@ -6,10 +6,10 @@ android {
 
     defaultConfig {
         applicationId "spider.project.nittfestheat"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 22
         versionCode 1
-        versionName "1.03"
+        versionName "1.05"
     }
     buildTypes {
         release {

@@ -155,7 +155,7 @@ public class LocService extends Service implements LocationListener {
         super.onDestroy();
         Toast.makeText(LocService.this, "Service stopped", Toast.LENGTH_SHORT).show();
         thread_stop = true;
-
+        locationManager.removeUpdates(LocService.this);
 
     }
 
