@@ -40,4 +40,13 @@ public class WebViewActivity extends AppCompatActivity {
         wb.setWebViewClient(new HelloWebViewClient());
         wb.loadUrl("https://spider.nitt.edu/heat/map");
     }
+
+@   Override
+    public void onBackPressed(){
+        Intent a = new Intent(Intent.ACTION_MAIN);
+        a.addCategory(Intent.CATEGORY_HOME);
+        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(a);
+
+    }
 }
