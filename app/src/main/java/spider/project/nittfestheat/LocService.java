@@ -88,7 +88,8 @@ public class LocService extends Service implements LocationListener {
         provider=LocationManager.GPS_PROVIDER;
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         final Location location;
-        locationManager.requestLocationUpdates(provider, 0, 0,LocService.this);
+
+        locationManager.requestLocationUpdates(provider, 5000, 0,LocService.this);
         location=locationManager.getLastKnownLocation(provider);
 
         thread = new Thread(new Runnable() {
@@ -119,10 +120,7 @@ public class LocService extends Service implements LocationListener {
 
 
     }
-    public void execute(){
 
-
-    }
 
     @Override
     public void onLocationChanged(Location location) {
@@ -164,7 +162,7 @@ public class LocService extends Service implements LocationListener {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            locationManager.requestLocationUpdates(provider, 0, 0,LocService.this, Looper.getMainLooper());
+            locationManager.requestLocationUpdates(provider, 5000, 0,LocService.this, Looper.getMainLooper());
         }
 
         @Override
