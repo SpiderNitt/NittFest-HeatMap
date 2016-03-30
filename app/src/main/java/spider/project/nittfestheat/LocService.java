@@ -17,6 +17,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Looper;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
@@ -97,13 +98,15 @@ public class LocService extends Service implements LocationListener {
             public void run() {
                 while (!thread_stop) {
 
+
+                    SystemClock.sleep(7000);
                     //every 120secs sends data
-                    try {
+                    /*try {
                         Thread.sleep(120000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-
+                    */
                     if(latitude==null||longitude==null){
                         onLocationChanged(location);
                     }
