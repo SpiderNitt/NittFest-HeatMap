@@ -16,6 +16,7 @@ import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Looper;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
@@ -78,57 +79,47 @@ public class LocService extends Service implements LocationListener {
 
     }
 
+    String provider;
     @Override
     public void onCreate() {
         super.onCreate();
-        String provider=LocationManager.GPS_PROVIDER;
+
         pref=getApplicationContext().getSharedPreferences("MyPrefs",MODE_PRIVATE);
+        provider=LocationManager.GPS_PROVIDER;
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            provider=LocationManager.GPS_PROVIDER;
-        }
         final Location location;
+        locationManager.requestLocationUpdates(provider, 0, 0,LocService.this);
         location=locationManager.getLastKnownLocation(provider);
-        locationManager.requestLocationUpdates(provider, 0, 0, this);
+
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (!thread_stop) {
 
-                    //every 30mins sends data
+                    //every 10secs sends data
                     try {
                         Thread.sleep(10000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+
                     if(latitude==null||longitude==null){
                         onLocationChanged(location);
                     }
                     Log.d("Loc", "Lat " + latitude + " Long " + longitude);
-                        //Toast.makeText(this, "Lat "+latitude+" Long "+longitude,
-                        //        Toast.LENGTH_SHORT).show();
                     new AsyncSendData().execute(latitude,longitude,rollNo);
-                       // onLocationChanged(finalLocation);
 
                     }
-                    // Log.d("Thread","Thread");
 
-
-
-                    //new AsyncSendData().execute(latitude, longitude);
-                    //
                 }
 
         });
         thread.start();
 
+
+
+    }
+    public void execute(){
 
 
     }
@@ -170,6 +161,11 @@ public class LocService extends Service implements LocationListener {
     //TODO: Finish the AsyncTask
     public class AsyncSendData extends AsyncTask<String,Void,Void>{
 
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            locationManager.requestLocationUpdates(provider, 0, 0,LocService.this, Looper.getMainLooper());
+        }
 
         @Override
         protected Void doInBackground(String... params)
@@ -206,6 +202,12 @@ public class LocService extends Service implements LocationListener {
             }
 
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            locationManager.removeUpdates(LocService.this);
         }
     }
 }
