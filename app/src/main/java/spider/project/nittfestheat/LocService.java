@@ -62,15 +62,17 @@ public class LocService extends Service implements LocationListener {
 
 
         Intent intent2 = new Intent(this, WebViewActivity.class);
+        Intent stopServiceIntent=new Intent(this, stopService.class);
         intent2.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent2, 0);
-
+        PendingIntent pendingIntent2 = PendingIntent.getActivity(this, 0, stopServiceIntent, 0);
         Notification noti = null;
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
             noti = new Notification.Builder(getApplicationContext())
                     .setContentTitle("NITTFest Heat")
                     .setContentText("May the odds be ever in your dept's favor")
                     .setSmallIcon(android.R.drawable.ic_dialog_map)
+                    .addAction(android.R.drawable.ic_delete,"Stop service",pendingIntent2)
                     .setContentIntent(pendingIntent)
                     .build();
         }
