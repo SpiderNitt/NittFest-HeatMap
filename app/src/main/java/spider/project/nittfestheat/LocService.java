@@ -72,6 +72,8 @@ public class LocService extends Service implements LocationListener {
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent2, 0);
 
 
+
+
         Notification noti = null;
 
             noti = new NotificationCompat.Builder(getApplicationContext())
