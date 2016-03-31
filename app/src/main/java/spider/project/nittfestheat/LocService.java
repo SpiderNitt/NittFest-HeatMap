@@ -20,6 +20,7 @@ import android.os.Looper;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -57,48 +58,61 @@ public class LocService extends Service implements LocationListener {
     public int onStartCommand(Intent intent, int flags, int startId) {
 
         rollNo=pref.getString("RollNo",null);
-        //rollNo=intent.getStringExtra("rollNo");
+
         Toast.makeText(this, "Service started", Toast.LENGTH_SHORT).show();
-
-
+/*
+        Intent stopServiceIntent=new Intent(this, stopService.class);
+        stopServiceIntent.setAction(Long.toString(System.currentTimeMillis()));
+        PendingIntent pendingIntent2 = PendingIntent.getActivity(this, 1, stopServiceIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+*/
         Intent intent2 = new Intent(this, WebViewActivity.class);
+
         intent2.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent2, 0);
 
+
         Notification noti = null;
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN) {
-            noti = new Notification.Builder(getApplicationContext())
+
+            noti = new NotificationCompat.Builder(getApplicationContext())
                     .setContentTitle("NITTFest Heat")
                     .setContentText("May the odds be ever in your dept's favor")
                     .setSmallIcon(android.R.drawable.ic_dialog_map)
+ //                   .addAction(android.R.drawable.ic_delete,"Stop service",pendingIntent2)
                     .setContentIntent(pendingIntent)
                     .build();
-        }
+
 
         startForeground(1234, noti);
+
+
+
         return START_NOT_STICKY;
 
     }
 
+
+
     String provider;
+    Location location;
     @Override
     public void onCreate() {
         super.onCreate();
 
         pref=getApplicationContext().getSharedPreferences("MyPrefs",MODE_PRIVATE);
-        provider=LocationManager.GPS_PROVIDER;
-        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        final Location location;
 
-        locationManager.requestLocationUpdates(provider, 5000, 0,LocService.this);
-        location=locationManager.getLastKnownLocation(provider);
+
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 while (!thread_stop) {
 
+                    provider=LocationManager.GPS_PROVIDER;
+                    locationManager.requestLocationUpdates(provider, 5000, 0,LocService.this,Looper.getMainLooper());
 
+                    location=locationManager.getLastKnownLocation(provider);
                     //SystemClock.sleep(60000);
                     //every 120secs sends data
                     try {
@@ -107,9 +121,23 @@ public class LocService extends Service implements LocationListener {
                         e.printStackTrace();
                     }
 
-                    if(latitude==null||longitude==null){
-                        onLocationChanged(location);
-                    }
+
+
+                        if(location!=null)
+                        {
+
+                            onLocationChanged(location);
+                            Log.d("lat","notnull");
+                        }
+                        else{
+                            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,5000,0,LocService.this,Looper.getMainLooper());
+                            location=locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                            onLocationChanged(location);
+                            Log.d("lat","null");
+                        }
+
+
+
                     Log.d("Loc", "Lat " + latitude + " Long " + longitude);
                     new AsyncSendData().execute(latitude,longitude,rollNo);
 
@@ -152,11 +180,11 @@ public class LocService extends Service implements LocationListener {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
+
         Toast.makeText(LocService.this, "Service stopped", Toast.LENGTH_SHORT).show();
         thread_stop = true;
         locationManager.removeUpdates(LocService.this);
-
+        super.onDestroy();
     }
 
     //TODO: Finish the AsyncTask
@@ -165,7 +193,7 @@ public class LocService extends Service implements LocationListener {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            locationManager.requestLocationUpdates(provider, 5000, 0,LocService.this, Looper.getMainLooper());
+          //  locationManager.requestLocationUpdates(provider, 5000, 0,LocService.this, Looper.getMainLooper());
         }
 
         @Override
@@ -175,7 +203,7 @@ public class LocService extends Service implements LocationListener {
             try {
                 String link = BASE_URL;
                 String latitude = params[0];
-                String longitude = params[1].toLowerCase();
+                String longitude = params[1];
                 String rollno = params[2];
 
                 URL URL=new URL(link);

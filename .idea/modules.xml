@@ -4,7 +4,6 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/NittfestHeat.iml" filepath="$PROJECT_DIR$/NittfestHeat.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/nittfest heat map.iml" filepath="$PROJECT_DIR$/nittfest heat map.iml" />
     </modules>
   </component>
 </project>
