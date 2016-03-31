@@ -114,7 +114,7 @@ public class LocService extends Service implements LocationListener {
 
                     location=locationManager.getLastKnownLocation(provider);
                     //SystemClock.sleep(60000);
-                    //every 120secs sends data
+                    //every 60secs sends data
                     try {
                         Thread.sleep(60000);
                     } catch (InterruptedException e) {
@@ -127,13 +127,14 @@ public class LocService extends Service implements LocationListener {
                         {
 
                             onLocationChanged(location);
-                            Log.d("lat","notnull");
+                            Log.d("lat","provider=GPS");
                         }
                         else{
                             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER,5000,0,LocService.this,Looper.getMainLooper());
                             location=locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                            if(location!=null)
                             onLocationChanged(location);
-                            Log.d("lat","null");
+                            Log.d("lat","provider=Network");
                         }
 
 
